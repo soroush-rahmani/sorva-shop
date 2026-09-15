@@ -38,27 +38,3 @@ html {
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
-
-/* خط زیر منوی nav — مثل دوشیزه: با ::after از سمت راست پدیدار میشود */
-.nav-underline {
-  position: relative;
-}
-.nav-underline::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  height: 2px;
-  width: 100%;
-  background: linear-gradient(
-    to left,
-    var(--color-brand-600),
-    var(--color-brand-400)
-  );
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.nav-underline.is-scrolled::after {
-  transform: scaleX(1);
-}
