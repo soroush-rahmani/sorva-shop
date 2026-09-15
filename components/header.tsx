@@ -154,10 +154,9 @@ export function Header() {
                         <Link
                           href={`/products?cat=${cat.slug}&sub=${leaf.slug}`}
                           onClick={() => setOpenMenu(null)}
-                          className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-brand-900/80 transition-colors hover:bg-brand-50 hover:text-brand-600"
+                          className="block rounded-lg px-3 py-1.5 text-sm text-brand-900/80 transition-colors hover:bg-brand-50 hover:text-brand-600"
                         >
-                          <span className="text-sm">{leaf.emoji}</span>
-                          <span>{leaf.label}</span>
+                          {leaf.label}
                         </Link>
                       </li>
                     ))}
