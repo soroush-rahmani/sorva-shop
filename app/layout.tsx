@@ -23,10 +23,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="fa" dir="rtl">
-      <body
-        className={`${estedad.variable} font-sans min-h-full flex flex-col antialiased`}
-      >
+    <html lang="fa" dir="rtl" className={estedad.variable}>
+      <body className="font-sans min-h-full flex flex-col antialiased">
         <CartProvider>{children}</CartProvider>
       </body>
     </html>
