@@ -4,21 +4,11 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { CartProvider } from "@/components/cart-provider";
 
-/* فونت ایران یکان وب (همان فونت استفاده‌شده در تاموگرل) */
-const iranyekan = localFont({
-  src: [
-    {
-      path: "../public/fonts/IRANYekanWebRegular.woff",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/IRANYekanWebBold.woff",
-      weight: "700",
-      style: "normal",
-    },
-  ],
-  variable: "--font-iranyekan",
+/* فونت استعداد (Estedad) — رایگان و متنباز با لایسنس OFL، حس و حالت نزدیک به ایران یکان */
+const estedad = localFont({
+  src: "../public/fonts/Estedad-VF.woff2",
+  weight: "100 900",
+  variable: "--font-estedad",
   display: "swap",
 });
 
@@ -35,7 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fa" dir="rtl">
       <body
-        className={`${iranyekan.variable} font-sans min-h-full flex flex-col antialiased`}
+        className={`${estedad.variable} font-sans min-h-full flex flex-col antialiased`}
       >
         <CartProvider>{children}</CartProvider>
       </body>
