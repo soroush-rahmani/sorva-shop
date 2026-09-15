@@ -1,0 +1,74 @@
+"use client";
+
+import Link from "next/link";
+import type { Product } from "@/lib/products";
+import { useCart } from "@/components/cart-provider";
+import { discountPercent, formatPrice, formatRating } from "@/lib/format";
+
+const faNum = new Intl.NumberFormat("fa-IR");
+
+export function ProductCard({ product }: { product: Product }) {
+  const { addItem } = useCart();
+  const hasDiscount =
+    product.originalPrice != null && product.originalPrice > product.price;
+
+  return (
+    <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-brand-100 bg-white shadow-sm transition hover:shadow-lg">
+      <Link href={`/products/${product.slug}`} className="relative block">
+        <div
+          className={`flex h-52 items-center justify-center bg-linear-to-br text-7xl ${product.gradient}`}
+        >
+          <span className="transition-transform duration-300 group-hover:scale-110">
+            {product.emoji}
+          </span>
+        </div>
+        {hasDiscount && (
+          <span className="absolute right-3 top-3 rounded-full bg-brand-600 px-2.5 py-1 text-xs font-bold text-white">
+            {faNum.format(discountPercent(product.price, product.originalPrice!))}
+            ٪-
+          </span>
+        )}
+        {product.isNew && (
+          <span className="absolute left-3 top-3 rounded-full bg-sky-500 px-2.5 py-1 text-xs font-bold text-white">
+            جدید
+          </span>
+        )}
+      </Link>
+
+      <div className="flex flex-1 flex-col p-4">
+        <Link href={`/products/${product.slug}`}>
+          <h3 className="font-bold text-brand-900 transition hover:text-brand-600">
+            {product.name}
+          </h3>
+        </Link>
+        <p className="mt-0.5 text-xs text-brand-400">
+          {product.brand} • {product.categoryLabel}
+        </p>
+        <p className="mt-1 text-xs text-amber-600">
+          ⭐ {formatRating(product.rating)}{" "}
+          <span dir="rtl" className="text-brand-300">({product.reviews} دیدگاه)</span>
+        </p>
+
+        <div className="mt-3 flex items-end justify-between gap-2">
+          <div>
+            {hasDiscount && (
+              <p className="text-xs text-brand-300 line-through">
+                {formatPrice(product.originalPrice!)}
+              </p>
+            )}
+            <p className="text-base font-black text-brand-700">
+              {formatPrice(product.price)}
+            </p>
+          </div>
+          <button
+            onClick={() => addItem(product.id)}
+            className="rounded-full bg-brand-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-brand-700"
+            aria-label={`افزودن ${product.name} به سبد خرید`}
+          >
+            🛍 افزودن
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
