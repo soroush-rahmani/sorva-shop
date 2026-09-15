@@ -64,7 +64,7 @@ export function HeroSlider() {
 
   return (
     <section
-      className="relative mx-auto w-4/5 overflow-hidden rounded-3xl text-white shadow-lg shadow-brand-200/50"
+      className="group relative mx-auto w-4/5 overflow-hidden rounded-3xl text-white shadow-lg shadow-brand-200/50"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-roledescription="اسلایدر"
@@ -117,11 +117,11 @@ export function HeroSlider() {
         ))}
       </div>
 
-      {/* دکمههای قبلی / بعدی */}
+      {/* دکمههای قبلی / بعدی — با هاور روی بنر ظاهر میشوند */}
       <button
         onClick={() => go(1)}
         aria-label="بنر بعدی"
-        className="absolute left-3 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/20 backdrop-blur transition hover:bg-white/35"
+        className="absolute left-3 top-1/2 z-10 grid h-10 w-10 -translate-x-3 -translate-y-1/2 place-items-center rounded-full bg-white/20 opacity-0 backdrop-blur transition-all duration-300 hover:bg-white/35 focus-visible:opacity-100 group-hover:translate-x-0 group-hover:opacity-100"
       >
         <svg
           className="h-5 w-5"
@@ -136,7 +136,7 @@ export function HeroSlider() {
       <button
         onClick={() => go(-1)}
         aria-label="بنر قبلی"
-        className="absolute right-3 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/20 backdrop-blur transition hover:bg-white/35"
+        className="absolute right-3 top-1/2 z-10 grid h-10 w-10 translate-x-3 -translate-y-1/2 place-items-center rounded-full bg-white/20 opacity-0 backdrop-blur transition-all duration-300 hover:bg-white/35 focus-visible:opacity-100 group-hover:translate-x-0 group-hover:opacity-100"
       >
         <svg
           className="h-5 w-5"
