@@ -2,10 +2,11 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 import { PRODUCTS } from "@/lib/products";
@@ -31,64 +32,85 @@ type CartContextValue = {
 const CartContext = createContext<CartContextValue | null>(null);
 
 const STORAGE_KEY = "sorva-cart-v1";
+const EMPTY: CartItem[] = [];
+
+/* استور خارجی سبک برای سبد خرید (سازگار با useSyncExternalStore) */
+const listeners = new Set<() => void>();
+let store: CartItem[] = EMPTY;
+let loaded = false;
+
+function load() {
+  if (loaded) return;
+  loaded = true;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw) as CartItem[];
+      store = Array.isArray(parsed) ? parsed : EMPTY;
+    }
+  } catch {
+    // ignore
+  }
+}
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+function getSnapshot(): CartItem[] {
+  load();
+  return store;
+}
+
+function getServerSnapshot(): CartItem[] {
+  return EMPTY;
+}
+
+function persist(next: CartItem[]) {
+  store = next;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  } catch {
+    // ignore
+  }
+  for (const listener of listeners) listener();
+}
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const items = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [isCartOpen, setCartOpen] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
 
-  // بارگذاری سبد از localStorage (بعد از اولین رندر)
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as CartItem[];
-        if (Array.isArray(parsed)) setItems(parsed);
-      }
-    } catch {
-      // ignore
-    } finally {
-      setHydrated(true);
-    }
+  const addItem = useCallback((productId: string, qty = 1) => {
+    const current = getSnapshot();
+    const found = current.find((i) => i.productId === productId);
+    const next = found
+      ? current.map((i) =>
+          i.productId === productId ? { ...i, qty: i.qty + qty } : i
+        )
+      : [...current, { productId, qty }];
+    persist(next);
   }, []);
 
-  // ذخیره سبد در localStorage
-  useEffect(() => {
-    if (!hydrated) return;
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    } catch {
-      // ignore
-    }
-  }, [items, hydrated]);
+  const removeItem = useCallback((productId: string) => {
+    persist(getSnapshot().filter((i) => i.productId !== productId));
+  }, []);
 
-  const addItem = (productId: string, qty = 1) => {
-    setItems((prev) => {
-      const found = prev.find((i) => i.productId === productId);
-      if (found) {
-        return prev.map((i) =>
-          i.productId === productId ? { ...i, qty: i.qty + qty } : i
-        );
-      }
-      return [...prev, { productId, qty }];
-    });
-  };
-
-  const removeItem = (productId: string) => {
-    setItems((prev) => prev.filter((i) => i.productId !== productId));
-  };
-
-  const updateQty = (productId: string, qty: number) => {
+  const updateQty = useCallback((productId: string, qty: number) => {
     if (qty <= 0) {
-      removeItem(productId);
+      persist(getSnapshot().filter((i) => i.productId !== productId));
       return;
     }
-    setItems((prev) =>
-      prev.map((i) => (i.productId === productId ? { ...i, qty } : i))
+    persist(
+      getSnapshot().map((i) =>
+        i.productId === productId ? { ...i, qty } : i
+      )
     );
-  };
+  }, []);
 
-  const clearCart = () => setItems([]);
+  const clearCart = useCallback(() => persist([]), []);
 
   const count = items.reduce((acc, i) => acc + i.qty, 0);
 
