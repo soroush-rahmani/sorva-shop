@@ -64,7 +64,7 @@ export function HeroSlider() {
 
   return (
     <section
-      className="relative overflow-hidden text-white"
+      className="relative mx-auto w-4/5 overflow-hidden rounded-3xl text-white shadow-lg shadow-brand-200/50"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-roledescription="اسلایدر"
