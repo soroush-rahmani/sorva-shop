@@ -3,11 +3,22 @@
 import Link from "next/link";
 import { CATEGORIES } from "@/lib/products";
 import { useCart } from "@/components/cart-provider";
+import { useSyncExternalStore } from "react";
 
 const faNum = new Intl.NumberFormat("fa-IR");
 
+function subscribeScroll(callback: () => void) {
+  window.addEventListener("scroll", callback, { passive: true });
+  return () => window.removeEventListener("scroll", callback);
+}
+
 export function Header() {
   const { count, openCart } = useCart();
+  const scrolled = useSyncExternalStore(
+    subscribeScroll,
+    () => window.scrollY > 8,
+    () => false,
+  );
 
   return (
     <header className="sticky top-0 z-40">
@@ -21,7 +32,7 @@ export function Header() {
       </div>
 
       {/* هدر اصلی */}
-      <div className="border-b border-brand-100 bg-white/95 backdrop-blur">
+      <div className="bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
           <Link
             href="/"
@@ -65,8 +76,8 @@ export function Header() {
         </div>
       </div>
 
-      {/* منوی دسته‌بندی (UX کاتالوگ دوشیزه) */}
-      <nav className="border-b border-brand-100 bg-white">
+      {/* منوی دسته‌بندی (UX کاتالوگ دوشیزه) — خط زیرین با ::after از راست پدیدار میشود */}
+      <nav className={`nav-underline bg-white ${scrolled ? "is-scrolled" : ""}`}>
         <div className="scrollbar-none mx-auto flex max-w-6xl items-center gap-2 overflow-x-auto px-4 py-2 text-sm">
           <Link
             href="/products"
