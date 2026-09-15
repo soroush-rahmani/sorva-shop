@@ -13,6 +13,14 @@ export type NavCategory = {
   children: NavLeaf[];
 };
 
+/* زیردستههای بهداشتی — لینکها به /products?cat=body&sub=Y */
+export const HYGIENE_MENU: NavLeaf[] = [
+  { slug: "shaving", label: "اصلاح صورت و بدن", emoji: "🪒" },
+  { slug: "body-care", label: "مراقبت از بدن", emoji: "🧼" },
+  { slug: "face-care", label: "مراقبت از صورت (اسکین کر)", emoji: "🧴" },
+  { slug: "accessories", label: "لوازم جانبی", emoji: "🧰" },
+];
+
 /* زیرزیردستههای آرایشی — لینکها به /products?cat=X&sub=Y */
 export const MAKEUP_MENU: NavCategory[] = [
   {

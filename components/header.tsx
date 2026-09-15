@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { MAKEUP_MENU } from "@/lib/nav";
+import { MAKEUP_MENU, HYGIENE_MENU, type NavLeaf } from "@/lib/nav";
 import { useCart } from "@/components/cart-provider";
 import { useState } from "react";
 
@@ -13,10 +13,17 @@ const NAV_ITEMS: {
   label: string;
   emoji: string;
   mega?: boolean;
+  dropdown?: NavLeaf[];
+  dropdownHref?: string;
 }[] = [
   { href: "/", label: "صفحه اصلی", emoji: "🏡" },
   { label: "محصولات آرایشی", emoji: "💄", mega: true },
-  { href: "/products?cat=body", label: "محصولات بهداشتی", emoji: "🧼" },
+  {
+    label: "محصولات بهداشتی",
+    emoji: "🧼",
+    dropdown: HYGIENE_MENU,
+    dropdownHref: "/products?cat=body",
+  },
   { href: "/products?cat=hair", label: "محصولات مو", emoji: "💇‍♀️" },
   { href: "/products?cat=perfume", label: "عطر و اسپری", emoji: "🌸" },
   { href: "/products?cat=accessory", label: "اکسسوری", emoji: "🎀" },
@@ -117,6 +124,74 @@ export function Header() {
                     />
                   </svg>
                 </button>
+              ) : item.dropdown ? (
+                <div
+                  key={item.label}
+                  className="relative"
+                  onMouseEnter={() => setOpenMenu(item.label)}
+                  onMouseLeave={() => setOpenMenu(null)}
+                >
+                  <button
+                    onClick={() =>
+                      setOpenMenu(openMenu === item.label ? null : item.label)
+                    }
+                    aria-expanded={openMenu === item.label}
+                    className={`flex items-center gap-1.5 rounded-t-xl px-3 py-3 text-sm font-bold transition-colors ${
+                      openMenu === item.label
+                        ? "text-brand-600"
+                        : "text-brand-900 hover:text-brand-600"
+                    }`}
+                  >
+                    <span className="text-base">{item.emoji}</span>
+                    <span>{item.label}</span>
+                    <svg
+                      className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                        openMenu === item.label ? "rotate-180" : ""
+                      }`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                    >
+                      <path
+                        d="M6 9l6 6 6-6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+
+                  {/* پنل کشویی بهداشتی */}
+                  <div
+                    className={`absolute right-0 top-full z-50 w-60 rounded-2xl border border-brand-100 bg-white p-2 shadow-xl shadow-brand-200/40 transition-all duration-200 ${
+                      openMenu === item.label
+                        ? "visible translate-y-0 opacity-100"
+                        : "invisible -translate-y-1 opacity-0"
+                    }`}
+                  >
+                    <Link
+                      href={item.dropdownHref!}
+                      onClick={() => setOpenMenu(null)}
+                      className="flex items-center gap-2 rounded-xl bg-brand-50 px-3 py-2 font-bold text-brand-800 transition-colors hover:bg-brand-100"
+                    >
+                      <span className="text-base">{item.emoji}</span>
+                      <span>همه محصولات بهداشتی</span>
+                    </Link>
+                    <ul className="mt-1 space-y-0.5">
+                      {item.dropdown.map((leaf) => (
+                        <li key={leaf.slug}>
+                          <Link
+                            href={`/products?cat=body&sub=${leaf.slug}`}
+                            onClick={() => setOpenMenu(null)}
+                            className="block rounded-lg px-3 py-1.5 text-sm text-brand-900/80 transition-colors hover:bg-brand-50 hover:text-brand-600"
+                          >
+                            {leaf.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               ) : (
                 <Link
                   key={item.label}
