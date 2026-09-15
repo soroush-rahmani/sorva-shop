@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import localFont from "next/font/local";
 import "./globals.css";
 import { CartProvider } from "@/components/cart-provider";
+import { BackToTop } from "@/components/back-to-top";
 
 /* فونت استعداد (Estedad) — رایگان و متنباز با لایسنس OFL، حس و حالت نزدیک به ایران یکان */
 const estedad = localFont({
@@ -25,7 +26,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fa" dir="rtl" className={estedad.variable}>
       <body className="font-sans min-h-full flex flex-col antialiased">
-        <CartProvider>{children}</CartProvider>
+        <CartProvider>
+          {children}
+          <BackToTop />
+        </CartProvider>
       </body>
     </html>
   );

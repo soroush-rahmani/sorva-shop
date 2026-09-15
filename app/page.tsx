@@ -1,6 +1,6 @@
 import { Header } from "@/components/header";
 import { CartDrawer } from "@/components/cart-drawer";
-import { Hero } from "@/components/hero";
+import { HeroSlider } from "@/components/hero-slider";
 import { CategoryIcons } from "@/components/category-icons";
 import { ProductSection } from "@/components/product-section";
 import { Faq } from "@/components/faq";
@@ -13,7 +13,7 @@ export default function Home() {
       <Header />
       <CartDrawer />
       <main>
-        <Hero />
+        <HeroSlider />
         <CategoryIcons />
 
         <ProductSection
