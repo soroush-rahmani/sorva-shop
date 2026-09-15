@@ -42,7 +42,7 @@ export function Header() {
 
       {/* هدر اصلی — بکگراند صورتی ملایم */}
       <div className="bg-brand-50">
-        <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-2.5">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5">
           <Link href="/" className="shrink-0" aria-label="سروا شاپ — صفحه اصلی">
             <Image
               src="/images/logo.png"
@@ -63,7 +63,7 @@ export function Header() {
             <span className="mr-2 text-brand-500">🔍</span>
           </div>
 
-          <div className="mr-auto flex items-center gap-2 md:mr-0">
+          <div className="flex items-center gap-3 sm:gap-5">
             <Link
               href="/login"
               className="hidden rounded-full border border-brand-200 bg-white px-4 py-2 text-sm font-bold text-brand-800 transition-colors hover:border-brand-300 hover:text-brand-600 sm:block"
@@ -73,12 +73,12 @@ export function Header() {
             </Link>
             <button
               onClick={openCart}
-              className="relative grid h-10 w-10 place-items-center rounded-full bg-brand-600 text-white transition-colors hover:bg-brand-700"
+              className="relative p-1 text-2xl transition-transform hover:scale-110 active:scale-95"
               aria-label="سبد خرید"
             >
-              <span className="text-lg">🛍</span>
+              <span className="leading-none">🛒</span>
               {count > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-900 px-1 text-[11px] text-white">
+                <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-600 px-1 text-[11px] font-bold text-white shadow-md ring-2 ring-brand-50">
                   {faNum.format(count)}
                 </span>
               )}
