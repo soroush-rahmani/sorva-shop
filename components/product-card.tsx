@@ -2,26 +2,46 @@
 
 import Link from "next/link";
 import type { Product } from "@/lib/products";
-import { useCart } from "@/components/cart-provider";
+import { AddToCartButton } from "@/components/add-to-cart-button";
 import { discountPercent, formatPrice, formatRating } from "@/lib/format";
 
 const faNum = new Intl.NumberFormat("fa-IR");
 
+/* عکس دوم (نمای متفاوت) هر محصول برای هاور — تا عکسهای واقعی اضافه شوند */
+const ALT_EMOJI: Record<string, string> = {
+  p1: "💋",
+  p2: "💋",
+  p3: "🎨",
+  p4: "👁️",
+  p5: "🖌️",
+  p6: "🧴",
+  p7: "🧴",
+  p8: "🧖‍♀️",
+  p9: "💄",
+  p10: "✨",
+};
+
 export function ProductCard({ product }: { product: Product }) {
-  const { addItem } = useCart();
   const hasDiscount =
     product.originalPrice != null && product.originalPrice > product.price;
 
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-brand-100 bg-white shadow-sm transition hover:shadow-lg">
       <Link href={`/products/${product.slug}`} className="relative block">
+        {/* تصویر اول */}
         <div
-          className={`flex h-52 items-center justify-center bg-linear-to-br text-7xl ${product.gradient}`}
+          className={`flex h-52 items-center justify-center bg-linear-to-br text-7xl transition-transform duration-500 group-hover:scale-95 ${product.gradient}`}
         >
-          <span className="transition-transform duration-300 group-hover:scale-110">
-            {product.emoji}
-          </span>
+          {product.emoji}
         </div>
+
+        {/* تصویر دوم — با هاور از مقیاس کوچک زوم میشود (scale 0.1 → 1) */}
+        <div
+          className={`absolute inset-0 flex items-center justify-center bg-linear-to-br text-8xl opacity-0 transition-all duration-500 group-hover:scale-100 group-hover:opacity-100 scale-10 ${product.gradient}`}
+        >
+          <span className="drop-shadow-md">{ALT_EMOJI[product.id] ?? product.emoji}</span>
+        </div>
+
         {hasDiscount && (
           <span className="absolute right-3 top-3 rounded-full bg-brand-600 px-2.5 py-1 text-xs font-bold text-white">
             {faNum.format(discountPercent(product.price, product.originalPrice!))}
@@ -60,13 +80,7 @@ export function ProductCard({ product }: { product: Product }) {
               {formatPrice(product.price)}
             </p>
           </div>
-          <button
-            onClick={() => addItem(product.id)}
-            className="rounded-full bg-brand-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-brand-700"
-            aria-label={`افزودن ${product.name} به سبد خرید`}
-          >
-            🛍 افزودن
-          </button>
+          <AddToCartButton productId={product.id} compact />
         </div>
       </div>
     </div>

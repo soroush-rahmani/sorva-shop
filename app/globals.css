@@ -38,3 +38,26 @@ html {
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
+/* انیمیشن فوران رژ و قلب هنگام افزودن به سبد */
+@keyframes sorva-burst {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--bx)), calc(-50% + var(--by)))
+      scale(1.3) rotate(var(--br));
+    opacity: 0;
+  }
+}
+.sorva-particle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: none;
+  animation: sorva-burst 0.9s cubic-bezier(0.16, 0.84, 0.44, 1) forwards;
+}

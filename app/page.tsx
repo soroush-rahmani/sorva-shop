@@ -1,7 +1,6 @@
 import { Header } from "@/components/header";
 import { CartDrawer } from "@/components/cart-drawer";
 import { HeroSlider } from "@/components/hero-slider";
-import { CategoryIcons } from "@/components/category-icons";
 import { ProductSection } from "@/components/product-section";
 import { Faq } from "@/components/faq";
 import { Footer } from "@/components/footer";
@@ -14,7 +13,6 @@ export default function Home() {
       <CartDrawer />
       <main>
         <HeroSlider />
-        <CategoryIcons />
 
         <ProductSection
           title="جدیدترین محصولات ✨"
