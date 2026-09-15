@@ -1,24 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { PRODUCTS } from "@/lib/products";
+import { MAKEUP_MENU } from "@/lib/nav";
 import { useCart } from "@/components/cart-provider";
 import { useState } from "react";
 
 const faNum = new Intl.NumberFormat("fa-IR");
-
-/* زیردستههای مگامنو آرایشی */
-const MAKEUP_CATS = [
-  { slug: "face", label: "آرایش صورت", emoji: "🪞" },
-  { slug: "eye", label: "آرایش چشم", emoji: "👁️" },
-  { slug: "brow", label: "آرایش ابرو", emoji: "🖌️" },
-  { slug: "lip", label: "آرایش لب", emoji: "💋" },
-];
-
-/* محصولات هر زیردسته (یکبار محاسبه) */
-const MAKEUP_PRODUCTS = Object.fromEntries(
-  MAKEUP_CATS.map((c) => [c.slug, PRODUCTS.filter((p) => p.category === c.slug)]),
-) as Record<string, typeof PRODUCTS>;
 
 /* آیتمهای نوبار — از راست به چپ مثل دوشیزه */
 const NAV_ITEMS: {
@@ -143,7 +130,7 @@ export function Header() {
             )}
           </div>
 
-          {/* مگامنو — پنل بزرگ تمامعرض با ستونهای زیردسته و محصولاتشون (مثل تاموگرل) */}
+          {/* مگامنو — پنل بزرگ تمامعرض با ستونهای زیردسته و زیرزیردستهها (مثل تاموگرل) */}
           <div
             className={`absolute inset-x-4 top-full z-50 rounded-2xl border border-brand-100 bg-white p-6 shadow-xl shadow-brand-200/40 transition-all duration-200 ${
               megaOpen
@@ -152,50 +139,31 @@ export function Header() {
             }`}
           >
             <div className="grid grid-cols-4 gap-6">
-              {MAKEUP_CATS.map((cat) => {
-                const items = MAKEUP_PRODUCTS[cat.slug];
-                return (
-                  <div key={cat.slug}>
-                    <Link
-                      href={`/products?cat=${cat.slug}`}
-                      className="flex items-center justify-between rounded-xl bg-brand-50 px-3 py-2 font-bold text-brand-800 transition-colors hover:bg-brand-100"
-                    >
-                      <span className="flex items-center gap-2">
-                        <span className="text-base">{cat.emoji}</span>
-                        <span>{cat.label}</span>
-                      </span>
-                      <span className="text-[11px] font-medium text-brand-400">
-                        {items.length > 0
-                          ? `${faNum.format(items.length)} محصول`
-                          : ""}
-                      </span>
-                    </Link>
-                    <ul className="mt-2 space-y-0.5">
-                      {items.map((p) => (
-                        <li key={p.id}>
-                          <Link
-                            href={`/products/${p.slug}`}
-                            className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-brand-900/80 transition-colors hover:bg-brand-50 hover:text-brand-600"
-                          >
-                            <span className="text-sm">{p.emoji}</span>
-                            <span className="truncate">{p.name}</span>
-                            {p.isNew && (
-                              <span className="shrink-0 rounded-full bg-brand-100 px-1.5 py-0.5 text-[10px] font-bold text-brand-600">
-                                جدید
-                              </span>
-                            )}
-                          </Link>
-                        </li>
-                      ))}
-                      {items.length === 0 && (
-                        <li className="px-3 py-1.5 text-xs text-brand-300">
-                          به‌زودی… ✨
-                        </li>
-                      )}
-                    </ul>
-                  </div>
-                );
-              })}
+              {MAKEUP_MENU.map((cat) => (
+                <div key={cat.slug}>
+                  <Link
+                    href={`/products?cat=${cat.slug}`}
+                    className="flex items-center gap-2 rounded-xl bg-brand-50 px-3 py-2 font-bold text-brand-800 transition-colors hover:bg-brand-100"
+                  >
+                    <span className="text-base">{cat.emoji}</span>
+                    <span>{cat.label}</span>
+                  </Link>
+                  <ul className="mt-2 space-y-0.5">
+                    {cat.children.map((leaf) => (
+                      <li key={leaf.slug}>
+                        <Link
+                          href={`/products?cat=${cat.slug}&sub=${leaf.slug}`}
+                          onClick={() => setOpenMenu(null)}
+                          className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-brand-900/80 transition-colors hover:bg-brand-50 hover:text-brand-600"
+                        >
+                          <span className="text-sm">{leaf.emoji}</span>
+                          <span>{leaf.label}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </div>
         </div>
