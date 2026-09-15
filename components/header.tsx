@@ -54,7 +54,7 @@ export function Header() {
             />
           </Link>
 
-          <div className="hidden items-center rounded-full border border-brand-200 bg-white px-4 py-1.5 md:flex md:w-60 lg:w-72">
+          <div className="hidden items-center rounded-full border border-brand-200 bg-white px-4 py-1.5 md:flex md:w-[480px] lg:w-[560px]">
             <input
               type="search"
               placeholder="جستجو در محصولات…"
