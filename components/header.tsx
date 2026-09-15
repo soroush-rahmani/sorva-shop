@@ -40,21 +40,21 @@ export function Header() {
     <header className="sticky top-0 z-40">
       
 
-      {/* هدر اصلی */}
-      <div className="bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
+      {/* هدر اصلی — بکگراند صورتی ملایم */}
+      <div className="bg-brand-50">
+        <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-2.5">
           <Link href="/" className="shrink-0" aria-label="سروا شاپ — صفحه اصلی">
             <Image
               src="/images/logo.png"
               alt="لوگوی سروا شاپ"
-              width={112}
-              height={112}
+              width={128}
+              height={128}
               priority
-              className="h-14 w-14 object-contain md:h-16 md:w-16"
+              className="h-16 w-16 object-contain md:h-20 md:w-20"
             />
           </Link>
 
-          <div className="hidden flex-1 items-center rounded-full border border-brand-200 bg-brand-50 px-4 py-2 md:flex">
+          <div className="hidden items-center rounded-full border border-brand-200 bg-white px-4 py-1.5 md:flex md:w-60 lg:w-72">
             <input
               type="search"
               placeholder="جستجو در محصولات…"
@@ -63,24 +63,22 @@ export function Header() {
             <span className="mr-2 text-brand-500">🔍</span>
           </div>
 
-          <div className="mr-auto flex items-center gap-1.5 md:mr-0">
+          <div className="mr-auto flex items-center gap-2 md:mr-0">
             <Link
               href="/login"
-              className="hidden items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-brand-800 hover:bg-brand-50 sm:flex"
+              className="hidden rounded-full border border-brand-200 bg-white px-4 py-2 text-sm font-bold text-brand-800 transition-colors hover:border-brand-300 hover:text-brand-600 sm:block"
               aria-label="ورود / ثبت‌نام"
             >
-              <span className="text-base">👤</span>
-              <span>ورود</span>
+              ورود / ثبت‌نام
             </Link>
             <button
               onClick={openCart}
-              className="relative flex items-center gap-1.5 rounded-full bg-brand-600 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-brand-700"
+              className="relative grid h-10 w-10 place-items-center rounded-full bg-brand-600 text-white transition-colors hover:bg-brand-700"
               aria-label="سبد خرید"
             >
-              <span className="text-base">🛍</span>
-              <span className="hidden sm:inline">سبد خرید</span>
+              <span className="text-lg">🛍</span>
               {count > 0 && (
-                <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-900 px-1 text-[11px] text-white">
+                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-900 px-1 text-[11px] text-white">
                   {faNum.format(count)}
                 </span>
               )}
