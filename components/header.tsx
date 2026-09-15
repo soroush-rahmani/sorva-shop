@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { MAKEUP_MENU, HYGIENE_MENU, type NavLeaf } from "@/lib/nav";
 import { useCart } from "@/components/cart-provider";
 import { useState } from "react";
@@ -42,11 +43,15 @@ export function Header() {
       {/* هدر اصلی */}
       <div className="bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
-          <Link
-            href="/"
-            className="shrink-0 bg-linear-to-l from-brand-600 to-brand-400 bg-clip-text text-xl font-black text-transparent md:text-2xl"
-          >
-            سروا شاپ 🌸
+          <Link href="/" className="shrink-0" aria-label="سروا شاپ — صفحه اصلی">
+            <Image
+              src="/images/logo.png"
+              alt="لوگوی سروا شاپ"
+              width={112}
+              height={112}
+              priority
+              className="h-14 w-14 object-contain md:h-16 md:w-16"
+            />
           </Link>
 
           <div className="hidden flex-1 items-center rounded-full border border-brand-200 bg-brand-50 px-4 py-2 md:flex">
