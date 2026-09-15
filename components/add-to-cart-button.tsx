@@ -50,8 +50,8 @@ export function AddToCartButton({
   return (
     <button
       onClick={handleClick}
-      className={`group/btn relative overflow-visible rounded-full bg-brand-100 font-bold text-brand-800 transition-colors hover:bg-brand-300 ${
-        compact ? "px-4 py-2 text-sm" : "w-full px-6 py-3 text-base"
+      className={`group/btn relative w-full overflow-visible rounded-full bg-brand-100 font-bold text-brand-800 transition-colors hover:bg-brand-300 ${
+        compact ? "px-4 py-2.5 text-sm" : "px-6 py-3 text-base"
       }`}
       aria-label={`افزودن به سبد خرید`}
     >

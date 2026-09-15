@@ -55,9 +55,9 @@ export function ProductCard({ product }: { product: Product }) {
         )}
       </Link>
 
-      <div className="flex flex-1 flex-col p-4">
+      <div className="flex flex-1 flex-col p-4 text-center">
         <Link href={`/products/${product.slug}`}>
-          <h3 className="font-bold text-brand-900 transition hover:text-brand-600">
+          <h3 className="font-bold leading-6 text-brand-900 transition hover:text-brand-600">
             {product.name}
           </h3>
         </Link>
@@ -69,17 +69,20 @@ export function ProductCard({ product }: { product: Product }) {
           <span dir="rtl" className="text-brand-300">({product.reviews} دیدگاه)</span>
         </p>
 
-        <div className="mt-3 flex items-end justify-between gap-2">
-          <div>
-            {hasDiscount && (
-              <p className="text-xs text-brand-300 line-through">
-                {formatPrice(product.originalPrice!)}
-              </p>
-            )}
-            <p className="text-base font-black text-brand-700">
-              {formatPrice(product.price)}
+        {/* قیمت — با فاصله بیشتر از اسم */}
+        <div className="mt-4">
+          {hasDiscount && (
+            <p className="text-xs text-brand-300 line-through">
+              {formatPrice(product.originalPrice!)}
             </p>
-          </div>
+          )}
+          <p className="text-lg font-black text-brand-700">
+            {formatPrice(product.price)}
+          </p>
+        </div>
+
+        {/* دکمه — همیشه پایینترین نقطه کارت */}
+        <div className="mt-auto pt-3">
           <AddToCartButton productId={product.id} compact />
         </div>
       </div>
