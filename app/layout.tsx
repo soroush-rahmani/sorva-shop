@@ -1,12 +1,25 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Vazirmatn } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { CartProvider } from "@/components/cart-provider";
 
-const vazirmatn = Vazirmatn({
-  subsets: ["arabic", "latin"],
-  variable: "--font-vazirmatn",
+/* فونت ایران یکان وب (همان فونت استفاده‌شده در تاموگرل) */
+const iranyekan = localFont({
+  src: [
+    {
+      path: "../public/fonts/IRANYekanWebRegular.woff",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/IRANYekanWebBold.woff",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-iranyekan",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -22,7 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fa" dir="rtl">
       <body
-        className={`${vazirmatn.variable} font-sans min-h-full flex flex-col antialiased`}
+        className={`${iranyekan.variable} font-sans min-h-full flex flex-col antialiased`}
       >
         <CartProvider>{children}</CartProvider>
       </body>
