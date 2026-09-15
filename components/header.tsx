@@ -1,29 +1,34 @@
 "use client";
 
 import Link from "next/link";
+import { PRODUCTS } from "@/lib/products";
 import { useCart } from "@/components/cart-provider";
 import { useState } from "react";
 
 const faNum = new Intl.NumberFormat("fa-IR");
+
+/* زیردستههای مگامنو آرایشی */
+const MAKEUP_CATS = [
+  { slug: "face", label: "آرایش صورت", emoji: "🪞" },
+  { slug: "eye", label: "آرایش چشم", emoji: "👁️" },
+  { slug: "brow", label: "آرایش ابرو", emoji: "🖌️" },
+  { slug: "lip", label: "آرایش لب", emoji: "💋" },
+];
+
+/* محصولات هر زیردسته (یکبار محاسبه) */
+const MAKEUP_PRODUCTS = Object.fromEntries(
+  MAKEUP_CATS.map((c) => [c.slug, PRODUCTS.filter((p) => p.category === c.slug)]),
+) as Record<string, typeof PRODUCTS>;
 
 /* آیتمهای نوبار — از راست به چپ مثل دوشیزه */
 const NAV_ITEMS: {
   href?: string;
   label: string;
   emoji: string;
-  children?: { href: string; label: string; emoji: string }[];
+  mega?: boolean;
 }[] = [
   { href: "/", label: "صفحه اصلی", emoji: "🏡" },
-  {
-    label: "محصولات آرایشی",
-    emoji: "💄",
-    children: [
-      { href: "/products?cat=face", label: "آرایش صورت", emoji: "🪞" },
-      { href: "/products?cat=eye", label: "آرایش چشم", emoji: "👁️" },
-      { href: "/products?cat=brow", label: "آرایش ابرو", emoji: "🖌️" },
-      { href: "/products?cat=lip", label: "آرایش لب", emoji: "💋" },
-    ],
-  },
+  { label: "محصولات آرایشی", emoji: "💄", mega: true },
   { href: "/products?cat=body", label: "محصولات بهداشتی", emoji: "🧼" },
   { href: "/products?cat=hair", label: "محصولات مو", emoji: "💇‍♀️" },
   { href: "/products?cat=perfume", label: "عطر و اسپری", emoji: "🌸" },
@@ -34,17 +39,11 @@ const NAV_ITEMS: {
 export function Header() {
   const { count, openCart } = useCart();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const megaOpen = openMenu === "محصولات آرایشی";
 
   return (
     <header className="sticky top-0 z-40">
-      {/* نوار اعتماد (الهام‌گرفته از UX دوشیزه) */}
-      <div className="bg-brand-700 text-white text-[13px]">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-6 gap-y-1 px-4 py-2">
-          <span>🚚 ارسال رایگان خرید بالای ۱٬۵۰۰٬۰۰۰ تومان</span>
-          <span className="hidden sm:inline">✅ ضمانت اصالت کالا</span>
-          <span className="hidden md:inline">💬 پشتیبانی ۲۴ ساعته</span>
-        </div>
-      </div>
+      
 
       {/* هدر اصلی */}
       <div className="bg-white/95 backdrop-blur">
@@ -91,24 +90,24 @@ export function Header() {
         </div>
       </div>
 
-      {/* نوبار اصلی — آیتمها از راست: صفحه اصلی، آرایشی، بهداشتی، مو، عطر، اکسسوری، درباره ما */}
+      {/* نوبار اصلی — آیتمها از راست + مگامنو آرایشی */}
       <nav className="bg-white">
-        <div className="mx-auto flex max-w-6xl items-center gap-1 px-4">
-          {NAV_ITEMS.map((item) =>
-            item.children ? (
-              <div
-                key={item.label}
-                className="relative"
-                onMouseEnter={() => setOpenMenu(item.label)}
-                onMouseLeave={() => setOpenMenu(null)}
-              >
+        <div
+          className="relative mx-auto max-w-6xl px-4"
+          onMouseLeave={() => setOpenMenu(null)}
+        >
+          <div className="flex items-center gap-1">
+            {NAV_ITEMS.map((item) =>
+              item.mega ? (
                 <button
+                  key={item.label}
+                  onMouseEnter={() => setOpenMenu(item.label)}
                   onClick={() =>
                     setOpenMenu(openMenu === item.label ? null : item.label)
                   }
-                  aria-expanded={openMenu === item.label}
+                  aria-expanded={megaOpen}
                   className={`flex items-center gap-1.5 rounded-t-xl px-3 py-3 text-sm font-bold transition-colors ${
-                    openMenu === item.label
+                    megaOpen
                       ? "text-brand-600"
                       : "text-brand-900 hover:text-brand-600"
                   }`}
@@ -117,57 +116,88 @@ export function Header() {
                   <span>{item.label}</span>
                   <svg
                     className={`h-3.5 w-3.5 transition-transform duration-200 ${
-                      openMenu === item.label ? "rotate-180" : ""
+                      megaOpen ? "rotate-180" : ""
                     }`}
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2.5"
                   >
-                    <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M6 9l6 6 6-6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </button>
-
-                {/* پنل کشویی */}
-                <div
-                  className={`absolute right-0 top-full z-50 w-52 rounded-2xl border border-brand-100 bg-white p-2 shadow-xl shadow-brand-200/40 transition-all duration-200 ${
-                    openMenu === item.label
-                      ? "visible translate-y-0 opacity-100"
-                      : "invisible -translate-y-1 opacity-0"
-                  }`}
+              ) : (
+                <Link
+                  key={item.label}
+                  href={item.href!}
+                  className="flex items-center gap-1.5 rounded-xl px-3 py-3 text-sm font-bold text-brand-900 transition-colors hover:text-brand-600"
                 >
-                  <Link
-                    href="/products"
-                    className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-bold text-brand-600 transition-colors hover:bg-brand-50"
-                  >
-                    <span>🛍️</span>
-                    <span>مشاهده همه محصولات</span>
-                  </Link>
-                  <div className="my-1 border-t border-brand-100" />
-                  {item.children.map((child) => (
+                  <span className="text-base">{item.emoji}</span>
+                  <span>{item.label}</span>
+                </Link>
+              ),
+            )}
+          </div>
+
+          {/* مگامنو — پنل بزرگ تمامعرض با ستونهای زیردسته و محصولاتشون (مثل تاموگرل) */}
+          <div
+            className={`absolute inset-x-4 top-full z-50 rounded-2xl border border-brand-100 bg-white p-6 shadow-xl shadow-brand-200/40 transition-all duration-200 ${
+              megaOpen
+                ? "visible translate-y-0 opacity-100"
+                : "invisible -translate-y-1 opacity-0"
+            }`}
+          >
+            <div className="grid grid-cols-4 gap-6">
+              {MAKEUP_CATS.map((cat) => {
+                const items = MAKEUP_PRODUCTS[cat.slug];
+                return (
+                  <div key={cat.slug}>
                     <Link
-                      key={child.href}
-                      href={child.href}
-                      onClick={() => setOpenMenu(null)}
-                      className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-brand-900 transition-colors hover:bg-brand-50 hover:text-brand-600"
+                      href={`/products?cat=${cat.slug}`}
+                      className="flex items-center justify-between rounded-xl bg-brand-50 px-3 py-2 font-bold text-brand-800 transition-colors hover:bg-brand-100"
                     >
-                      <span className="text-base">{child.emoji}</span>
-                      <span>{child.label}</span>
+                      <span className="flex items-center gap-2">
+                        <span className="text-base">{cat.emoji}</span>
+                        <span>{cat.label}</span>
+                      </span>
+                      <span className="text-[11px] font-medium text-brand-400">
+                        {items.length > 0
+                          ? `${faNum.format(items.length)} محصول`
+                          : ""}
+                      </span>
                     </Link>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <Link
-                key={item.label}
-                href={item.href!}
-                className="flex items-center gap-1.5 rounded-xl px-3 py-3 text-sm font-bold text-brand-900 transition-colors hover:text-brand-600"
-              >
-                <span className="text-base">{item.emoji}</span>
-                <span>{item.label}</span>
-              </Link>
-            ),
-          )}
+                    <ul className="mt-2 space-y-0.5">
+                      {items.map((p) => (
+                        <li key={p.id}>
+                          <Link
+                            href={`/products/${p.slug}`}
+                            className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-brand-900/80 transition-colors hover:bg-brand-50 hover:text-brand-600"
+                          >
+                            <span className="text-sm">{p.emoji}</span>
+                            <span className="truncate">{p.name}</span>
+                            {p.isNew && (
+                              <span className="shrink-0 rounded-full bg-brand-100 px-1.5 py-0.5 text-[10px] font-bold text-brand-600">
+                                جدید
+                              </span>
+                            )}
+                          </Link>
+                        </li>
+                      ))}
+                      {items.length === 0 && (
+                        <li className="px-3 py-1.5 text-xs text-brand-300">
+                          به‌زودی… ✨
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </nav>
     </header>
