@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { Product } from "@/lib/products";
 import { AddToCartButton } from "@/components/add-to-cart-button";
-import { discountPercent, formatPrice, formatRating } from "@/lib/format";
+import { discountPercent, formatPrice } from "@/lib/format";
 
 const faNum = new Intl.NumberFormat("fa-IR");
 
@@ -61,13 +61,6 @@ export function ProductCard({ product }: { product: Product }) {
             {product.name}
           </h3>
         </Link>
-        <p className="mt-0.5 text-xs text-brand-400">
-          {product.brand} • {product.categoryLabel}
-        </p>
-        <p className="mt-1 text-xs text-amber-600">
-          ⭐ {formatRating(product.rating)}{" "}
-          <span dir="rtl" className="text-brand-300">({product.reviews} دیدگاه)</span>
-        </p>
 
         {/* قیمت — با فاصله بیشتر از اسم */}
         <div className="mt-4">
