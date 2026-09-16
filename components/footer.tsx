@@ -6,13 +6,15 @@ export function Footer() {
     <footer className="mt-auto border-t border-brand-100 bg-brand-50">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 md:grid-cols-4">
         <div>
-          <Image
-            src="/images/logo.png"
-            alt="لوگوی سروا شاپ"
-            width={96}
-            height={96}
-            className="h-16 w-16 object-contain md:h-20 md:w-20"
-          />
+          <Link href="/" aria-label="سروا شاپ — صفحه اصلی">
+            <Image
+              src="/images/logo.png"
+              alt="لوگوی سروا شاپ"
+              width={96}
+              height={96}
+              className="h-16 w-16 object-contain md:h-20 md:w-20"
+            />
+          </Link>
           <p className="mt-3 text-sm leading-7 text-brand-700">
             فروشگاه آنلاین لوازم آرایشی و بهداشتی؛ جدیدترین برندها با ضمانت
             اصالت، ارسال سریع و قیمت مناسب. زیبایی، حق توست.
