@@ -110,13 +110,13 @@ export function MobileNav() {
         aria-hidden="true"
       />
 
-      {/* Category Sheet */}
+            {/* Category Sheet — slide-over از سمت راست مثل تامو */}
       <div
         role="dialog"
         aria-modal="true"
         aria-label="دسته‌بندی محصولات"
-        className={`fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-3xl bg-white transition-transform duration-300 md:hidden ${
-          sheetOpen ? "translate-y-0" : "translate-y-full"
+                className={`fixed inset-y-0 right-0 z-50 flex h-screen w-[85vw] max-w-sm flex-col bg-white shadow-xl transition-transform duration-300 md:hidden ${
+          sheetOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="sticky top-0 flex items-center justify-between border-b border-brand-100 bg-white/95 px-5 py-4 backdrop-blur">
@@ -130,7 +130,7 @@ export function MobileNav() {
           </button>
         </div>
 
-        <div className="p-4 pb-8">
+                <div className="flex-1 overflow-y-auto p-4 pb-8">
           <Link
             href="/products"
             onClick={() => setSheetOpen(false)}
