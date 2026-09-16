@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-brand-100 bg-brand-50">
+    <footer className="mt-auto border-t border-brand-200 bg-brand-200/70">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 md:grid-cols-4">
         <div>
           <Link href="/" aria-label="سروا شاپ — صفحه اصلی">
@@ -59,7 +59,7 @@ export function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-brand-200/60 bg-brand-100/50">
+      <div className="border-t border-brand-300/70 bg-brand-300/60">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-brand-600 sm:flex-row">
           <p className="sm:text-right">
             تمامی حقوق برای سروا شاپ محفوظ است © {new Date().getFullYear()}

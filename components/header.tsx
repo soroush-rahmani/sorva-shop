@@ -40,8 +40,8 @@ export function Header() {
     <header className="sticky top-0 z-40">
       
 
-      {/* هدر اصلی — بکگراند صورتی ملایم */}
-      <div className="bg-brand-50">
+      {/* هدر اصلی — بکگراند صورتی */}
+      <div className="bg-brand-100">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5">
           <Link href="/" className="shrink-0" aria-label="سروا شاپ — صفحه اصلی">
             <Image
@@ -78,7 +78,7 @@ export function Header() {
             >
               <span className="leading-none">🛒</span>
               {count > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-600 px-1 text-[11px] font-bold text-white shadow-md ring-2 ring-brand-50">
+                <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-600 px-1 text-[11px] font-bold text-white shadow-md ring-2 ring-brand-100">
                   {faNum.format(count)}
                 </span>
               )}
