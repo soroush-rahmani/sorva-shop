@@ -63,19 +63,17 @@ export function ProductCard({ product }: { product: Product }) {
         </Link>
 
         {/* قیمت — با فاصله بیشتر از اسم */}
-        <div className="mt-4">
-          {hasDiscount && (
-            <p className="text-xs text-brand-300 line-through">
-              {formatPrice(product.originalPrice!)}
-            </p>
-          )}
+        <div className="mt-auto pt-4">
+          <p className="h-4 text-xs leading-4 text-brand-300 line-through">
+            {hasDiscount ? formatPrice(product.originalPrice!) : "\u00A0"}
+          </p>
           <p className="text-lg font-black text-brand-700">
             {formatPrice(product.price)}
           </p>
         </div>
 
         {/* دکمه — همیشه پایینترین نقطه کارت */}
-        <div className="mt-auto pt-3">
+        <div className="pt-3">
           <AddToCartButton productId={product.id} compact />
         </div>
       </div>

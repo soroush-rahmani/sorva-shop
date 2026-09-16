@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { MAKEUP_MENU, HYGIENE_MENU, type NavLeaf } from "@/lib/nav";
+import {
+  MAKEUP_MENU,
+  HYGIENE_MENU,
+  HAIR_MENU,
+  PERFUME_MENU,
+  ACCESSORY_MENU,
+  type NavLeaf,
+} from "@/lib/nav";
 import { useCart } from "@/components/cart-provider";
 import { useState } from "react";
 
@@ -15,7 +22,7 @@ const NAV_ITEMS: {
   emoji: string;
   mega?: boolean;
   dropdown?: NavLeaf[];
-  dropdownHref?: string;
+  dropdownCat?: string;
 }[] = [
   { href: "/", label: "صفحه اصلی", emoji: "🏡" },
   { label: "محصولات آرایشی", emoji: "💄", mega: true },
@@ -23,11 +30,26 @@ const NAV_ITEMS: {
     label: "محصولات بهداشتی",
     emoji: "🧼",
     dropdown: HYGIENE_MENU,
-    dropdownHref: "/products?cat=body",
+    dropdownCat: "body",
   },
-  { href: "/products?cat=hair", label: "محصولات مو", emoji: "💇‍♀️" },
-  { href: "/products?cat=perfume", label: "عطر و اسپری", emoji: "🌸" },
-  { href: "/products?cat=accessory", label: "اکسسوری", emoji: "🎀" },
+  {
+    label: "محصولات مو",
+    emoji: "💇‍♀️",
+    dropdown: HAIR_MENU,
+    dropdownCat: "hair",
+  },
+  {
+    label: "عطر و اسپری",
+    emoji: "🌸",
+    dropdown: PERFUME_MENU,
+    dropdownCat: "perfume",
+  },
+  {
+    label: "اکسسوری",
+    emoji: "🎀",
+    dropdown: ACCESSORY_MENU,
+    dropdownCat: "accessory",
+  },
   { href: "/about", label: "درباره ما", emoji: "💗" },
 ];
 
@@ -173,18 +195,18 @@ export function Header() {
                     }`}
                   >
                     <Link
-                      href={item.dropdownHref!}
+                      href={`/products?cat=${item.dropdownCat}`}
                       onClick={() => setOpenMenu(null)}
                       className="flex items-center gap-2 rounded-xl bg-brand-50 px-3 py-2 font-bold text-brand-800 transition-colors hover:bg-brand-100"
                     >
                       <span className="text-base">{item.emoji}</span>
-                      <span>همه محصولات بهداشتی</span>
+                      <span>همه {item.label}</span>
                     </Link>
                     <ul className="mt-1 space-y-0.5">
                       {item.dropdown.map((leaf) => (
                         <li key={leaf.slug}>
                           <Link
-                            href={`/products?cat=body&sub=${leaf.slug}`}
+                            href={`/products?cat=${item.dropdownCat}&sub=${leaf.slug}`}
                             onClick={() => setOpenMenu(null)}
                             className="block rounded-lg px-3 py-1.5 text-sm text-brand-900/80 transition-colors hover:bg-brand-50 hover:text-brand-600"
                           >
