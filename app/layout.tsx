@@ -25,7 +25,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fa" dir="rtl" className={estedad.variable}>
-      <body className="font-sans min-h-full flex flex-col antialiased">
+      {/* suppressHydrationWarning: افزونههای مرورگر (مثل ColorZilla) اتریبیوت به body تزریق میکنند */}
+      <body
+        className="font-sans min-h-full flex flex-col antialiased"
+        suppressHydrationWarning
+      >
         <CartProvider>
           {children}
           <BackToTop />
