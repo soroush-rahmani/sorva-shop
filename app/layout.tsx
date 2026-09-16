@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { CartProvider } from "@/components/cart-provider";
 import { BackToTop } from "@/components/back-to-top";
+import { MobileNav } from "@/components/mobile-nav";
 
 /* فونت استعداد (Estedad) — رایگان و متنباز با لایسنس OFL، حس و حالت نزدیک به ایران یکان */
 const estedad = localFont({
@@ -27,12 +28,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="fa" dir="rtl" className={estedad.variable}>
       {/* suppressHydrationWarning: افزونههای مرورگر (مثل ColorZilla) اتریبیوت به body تزریق میکنند */}
       <body
-        className="font-sans min-h-full flex flex-col antialiased"
+                className="font-sans min-h-full flex flex-col overflow-x-hidden antialiased md:pb-0 pb-[64px]"
         suppressHydrationWarning
       >
-        <CartProvider>
+                <CartProvider>
           {children}
           <BackToTop />
+          <MobileNav />
         </CartProvider>
       </body>
     </html>

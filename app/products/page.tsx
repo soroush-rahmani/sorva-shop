@@ -9,6 +9,7 @@ import {
   CATEGORY_GROUPS,
   DEALS,
   productsByCategory,
+  searchProducts,
 } from "@/lib/products";
 import { subLabel, subcategoriesFor } from "@/lib/nav";
 
@@ -26,22 +27,34 @@ function categoryLabel(slug?: string) {
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ cat?: string; sub?: string; deals?: string }>;
+  searchParams: Promise<{
+    cat?: string;
+    sub?: string;
+    deals?: string;
+    q?: string;
+  }>;
 }) {
   const params = await searchParams;
   const cat = params.cat;
   const sub = params.sub;
   const deals = params.deals === "1";
+  const query = (params.q ?? "").trim();
 
-  const products = deals ? DEALS : productsByCategory(cat, sub);
-  const subs = subcategoriesFor(cat);
+  const products = query
+    ? searchProducts(query)
+    : deals
+      ? DEALS
+      : productsByCategory(cat, sub);
+  const subs = query ? [] : subcategoriesFor(cat);
   const catLabel = categoryLabel(cat);
   const currentSubLabel = subLabel(cat, sub);
-  const heading = deals
-    ? "تخفیفات ویژه"
-    : currentSubLabel
-      ? `${catLabel} / ${currentSubLabel}`
-      : catLabel;
+  const heading = query
+    ? `نتایج جستجو برای «${query}»`
+    : deals
+      ? "تخفیفات ویژه"
+      : currentSubLabel
+        ? `${catLabel} / ${currentSubLabel}`
+        : catLabel;
 
   return (
     <>

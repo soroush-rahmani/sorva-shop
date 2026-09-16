@@ -947,3 +947,23 @@ export function productsByCategory(category?: string, sub?: string): Product[] {
 export const NEW_PRODUCTS = PRODUCTS.filter((p) => p.isNew);
 
 export const DEALS = PRODUCTS.filter((p) => p.originalPrice);
+
+/* جستجوی ساده در نام، برند، دسته و توضیحات محصول */
+export function searchProducts(query: string): Product[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return [];
+  const terms = q.split(/\s+/).filter(Boolean);
+
+  return PRODUCTS.filter((p) => {
+    const haystack = [
+      p.name,
+      p.brand,
+      p.categoryLabel,
+      p.subcategory ?? "",
+      p.description,
+    ]
+      .join(" ")
+      .toLowerCase();
+    return terms.every((t) => haystack.includes(t));
+  });
+}
