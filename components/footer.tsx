@@ -1,13 +1,18 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-brand-100 bg-white">
+    <footer className="mt-auto border-t border-brand-100 bg-brand-50">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 md:grid-cols-4">
         <div>
-          <p className="bg-linear-to-l from-brand-600 to-brand-400 bg-clip-text text-lg font-black text-transparent">
-            سروا شاپ 🌸
-          </p>
+          <Image
+            src="/images/logo.png"
+            alt="لوگوی سروا شاپ"
+            width={96}
+            height={96}
+            className="h-16 w-16 object-contain md:h-20 md:w-20"
+          />
           <p className="mt-3 text-sm leading-7 text-brand-700">
             فروشگاه آنلاین لوازم آرایشی و بهداشتی؛ جدیدترین برندها با ضمانت
             اصالت، ارسال سریع و قیمت مناسب. زیبایی، حق توست.
@@ -52,8 +57,27 @@ export function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-brand-100 py-4 text-center text-xs text-brand-400">
-        تمامی حقوق برای سروا شاپ محفوظ است © {new Date().getFullYear()}
+      <div className="border-t border-brand-200/60 bg-brand-100/50">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-brand-600 sm:flex-row">
+          <p className="sm:text-right">
+            تمامی حقوق برای سروا شاپ محفوظ است © {new Date().getFullYear()}
+          </p>
+          <p>
+            طراحی و توسعه با{" "}
+            <span aria-hidden className="text-brand-500">
+              💗
+            </span>{" "}
+            توسط{" "}
+            <a
+              href="https://t.me/sushikhan83"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-700 transition-colors hover:text-brand-500"
+            >
+              سروش رحمانی
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );
