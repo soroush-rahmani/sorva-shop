@@ -18,7 +18,7 @@ export function BackToTop() {
         <button
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="رفتن به بالای صفحه"
-      className={`fixed bottom-5 left-5 z-50 grid h-12 w-12 place-items-center rounded-full bg-brand-600 text-white shadow-lg shadow-brand-600/30 transition-all duration-300 hover:bg-brand-700 md:bottom-5 ${
+      className={`fixed bottom-20 left-5 z-50 grid h-12 w-12 place-items-center rounded-full bg-brand-600 text-white shadow-lg shadow-brand-600/30 transition-all duration-300 hover:bg-brand-700 md:bottom-5 ${
         visible
           ? "translate-y-0 opacity-100"
           : "pointer-events-none translate-y-4 opacity-0"
