@@ -4,7 +4,12 @@ import { Header } from "@/components/header";
 import { CartDrawer } from "@/components/cart-drawer";
 import { Footer } from "@/components/footer";
 import { ProductCard } from "@/components/product-card";
-import { CATEGORIES, CATEGORY_GROUPS, DEALS, groupOfCategory, productsByCategory } from "@/lib/products";
+import {
+  CATEGORIES,
+  CATEGORY_GROUPS,
+  DEALS,
+  productsByCategory,
+} from "@/lib/products";
 import { subLabel, subcategoriesFor } from "@/lib/nav";
 
 export const metadata: Metadata = {
@@ -32,7 +37,6 @@ export default async function ProductsPage({
   const subs = subcategoriesFor(cat);
   const catLabel = categoryLabel(cat);
   const currentSubLabel = subLabel(cat, sub);
-  const activeGroup = deals ? undefined : groupOfCategory(cat);
   const heading = deals
     ? "تخفیفات ویژه"
     : currentSubLabel
@@ -47,43 +51,6 @@ export default async function ProductsPage({
         <h1 className="text-xl font-black text-brand-900 md:text-2xl">
           {heading}
         </h1>
-
-        {/* فیلتر گروه‌های نوبار — سطح اول */}
-        <div className="scrollbar-none mt-4 flex items-center gap-2 overflow-x-auto pb-1 text-sm">
-          <Link
-            href="/products"
-            className={`shrink-0 whitespace-nowrap rounded-full px-4 py-1.5 font-bold ${
-              !cat && !deals
-                ? "bg-brand-600 text-white"
-                : "border border-brand-200 text-brand-800 hover:bg-brand-50"
-            }`}
-          >
-            همه
-          </Link>
-          {CATEGORY_GROUPS.map((g) => (
-            <Link
-              key={g.slug}
-              href={`/products?cat=${g.slug}`}
-              className={`shrink-0 whitespace-nowrap rounded-full px-4 py-1.5 ${
-                activeGroup?.slug === g.slug
-                  ? "bg-brand-600 font-bold text-white"
-                  : "border border-brand-200 text-brand-800 hover:bg-brand-50"
-              }`}
-            >
-              {g.emoji} {g.label}
-            </Link>
-          ))}
-          <Link
-            href="/products?deals=1"
-            className={`shrink-0 whitespace-nowrap rounded-full px-4 py-1.5 ${
-              deals
-                ? "bg-amber-500 font-bold text-white"
-                : "border border-amber-300 text-amber-700 hover:bg-amber-50"
-            }`}
-          >
-            تخفیفات ویژه
-          </Link>
-        </div>
 
         {/* فیلتر زیردسته‌ها — فقط وقتی دسته‌ای انتخاب شده باشه */}
         {subs.length > 0 && !deals && (
