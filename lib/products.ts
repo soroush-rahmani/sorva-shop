@@ -16,6 +16,7 @@ export type Product = {
   description: string;
 };
 
+/* دسته‌های محصول (سطح دوم نوبار) */
 export const CATEGORIES: {
   slug: string;
   label: string;
@@ -25,13 +26,58 @@ export const CATEGORIES: {
   { slug: "eye", label: "آرایش چشم", emoji: "👁" },
   { slug: "brow", label: "آرایش ابرو", emoji: "🖌" },
   { slug: "face", label: "آرایش صورت", emoji: "✨" },
-  { slug: "skin", label: "مراقبت پوست", emoji: "🧴" },
   { slug: "body", label: "محصولات بهداشتی", emoji: "🧼" },
   { slug: "hair", label: "محصولات مو", emoji: "💇‍♀️" },
   { slug: "perfume", label: "عطر و اسپری", emoji: "🌸" },
   { slug: "accessory", label: "اکسسوری", emoji: "🎀" },
-  { slug: "tools", label: "ابزار آرایش", emoji: "🪞" },
 ];
+
+/* گروه‌های نوبار (سطح اول) — هر گروه یک یا چند دسته را پوشش می‌دهد */
+export const CATEGORY_GROUPS: {
+  slug: string;
+  label: string;
+  emoji: string;
+  categories: string[];
+}[] = [
+  {
+    slug: "cosmetic",
+    label: "محصولات آرایشی",
+    emoji: "💄",
+    categories: ["face", "eye", "brow", "lip"],
+  },
+  {
+    slug: "body",
+    label: "محصولات بهداشتی",
+    emoji: "🧼",
+    categories: ["body"],
+  },
+  { slug: "hair", label: "محصولات مو", emoji: "💇‍♀️", categories: ["hair"] },
+  {
+    slug: "perfume",
+    label: "عطر و اسپری",
+    emoji: "🌸",
+    categories: ["perfume"],
+  },
+  {
+    slug: "accessory",
+    label: "اکسسوری",
+    emoji: "🎀",
+    categories: ["accessory"],
+  },
+];
+
+export function getCategoryGroup(slug?: string) {
+  if (!slug) return undefined;
+  return CATEGORY_GROUPS.find((g) => g.slug === slug);
+}
+
+/* گروهی که یک دسته به آن تعلق دارد (برای فعال نشان دادن چیپ گروه) */
+export function groupOfCategory(category?: string) {
+  if (!category) return undefined;
+  return CATEGORY_GROUPS.find(
+    (g) => g.slug === category || g.categories.includes(category),
+  );
+}
 
 export const PRODUCTS: Product[] = [
   {
@@ -125,8 +171,9 @@ export const PRODUCTS: Product[] = [
     slug: "vitamin-c-serum",
     name: "سرم ویتامین C روشن‌کننده",
     brand: "گلدن اسکین",
-    category: "skin",
-    categoryLabel: "مراقبت پوست",
+    category: "body",
+    subcategory: "face-care",
+    categoryLabel: "مراقبت از صورت (اسکین کر)",
     emoji: "🍊",
     gradient: "from-orange-200 via-amber-100 to-rose-100",
     price: 780000,
@@ -142,8 +189,9 @@ export const PRODUCTS: Product[] = [
     slug: "spf50-sunscreen",
     name: "کرم ضدآفتاب SPF50 آبرسان",
     brand: "سانگارد",
-    category: "skin",
-    categoryLabel: "مراقبت پوست",
+    category: "body",
+    subcategory: "face-care",
+    categoryLabel: "مراقبت از صورت (اسکین کر)",
     emoji: "☀️",
     gradient: "from-yellow-200 via-rose-100 to-pink-100",
     price: 495000,
@@ -158,8 +206,9 @@ export const PRODUCTS: Product[] = [
     slug: "aloe-sheet-mask",
     name: "ماسک ورقه‌ای آلوئه‌ورا",
     brand: "نچرال بایو",
-    category: "skin",
-    categoryLabel: "مراقبت پوست",
+    category: "body",
+    subcategory: "face-care",
+    categoryLabel: "مراقبت از صورت (اسکین کر)",
     emoji: "🥒",
     gradient: "from-green-200 via-emerald-100 to-rose-50",
     price: 89000,
@@ -174,8 +223,9 @@ export const PRODUCTS: Product[] = [
     slug: "contour-brush-set",
     name: "براش کانتور و هایلایتر",
     brand: "گلوری",
-    category: "tools",
-    categoryLabel: "ابزار آرایش",
+    category: "accessory",
+    subcategory: "makeup-brush",
+    categoryLabel: "براش و قلم‌مو",
     emoji: "🖌️",
     gradient: "from-violet-200 via-pink-100 to-rose-100",
     price: 185000,
@@ -871,8 +921,25 @@ export function getProduct(slug: string): Product | undefined {
 }
 
 export function productsByCategory(category?: string, sub?: string): Product[] {
-  let list = PRODUCTS;
-  if (category) list = list.filter((p) => p.category === category);
+  // بدون دسته: همه محصولات (یا فیلتر فقط بر اساس زیردسته)
+  if (!category) {
+    return sub ? PRODUCTS.filter((p) => p.subcategory === sub) : PRODUCTS;
+  }
+
+  // گروه (مثلاً محصولات آرایشی = صورت + چشم + ابرو + لب)
+  const group = getCategoryGroup(category);
+  if (group) {
+    let list = PRODUCTS.filter((p) => group.categories.includes(p.category));
+    if (sub) {
+      list = list.filter(
+        (p) => p.category === sub || p.subcategory === sub,
+      );
+    }
+    return list;
+  }
+
+  // دسته تکی
+  let list = PRODUCTS.filter((p) => p.category === category);
   if (sub) list = list.filter((p) => p.subcategory === sub);
   return list;
 }

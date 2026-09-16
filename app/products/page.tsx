@@ -4,7 +4,7 @@ import { Header } from "@/components/header";
 import { CartDrawer } from "@/components/cart-drawer";
 import { Footer } from "@/components/footer";
 import { ProductCard } from "@/components/product-card";
-import { CATEGORIES, DEALS, productsByCategory } from "@/lib/products";
+import { CATEGORIES, CATEGORY_GROUPS, DEALS, groupOfCategory, productsByCategory } from "@/lib/products";
 import { subLabel, subcategoriesFor } from "@/lib/nav";
 
 export const metadata: Metadata = {
@@ -13,6 +13,8 @@ export const metadata: Metadata = {
 
 function categoryLabel(slug?: string) {
   if (!slug) return "همه محصولات";
+  const group = CATEGORY_GROUPS.find((g) => g.slug === slug);
+  if (group) return group.label;
   return CATEGORIES.find((c) => c.slug === slug)?.label ?? "همه محصولات";
 }
 
@@ -30,6 +32,7 @@ export default async function ProductsPage({
   const subs = subcategoriesFor(cat);
   const catLabel = categoryLabel(cat);
   const currentSubLabel = subLabel(cat, sub);
+  const activeGroup = deals ? undefined : groupOfCategory(cat);
   const heading = deals
     ? "تخفیفات ویژه"
     : currentSubLabel
@@ -45,7 +48,7 @@ export default async function ProductsPage({
           {heading}
         </h1>
 
-        {/* فیلتر دسته‌بندی */}
+        {/* فیلتر گروه‌های نوبار — سطح اول */}
         <div className="scrollbar-none mt-4 flex items-center gap-2 overflow-x-auto pb-1 text-sm">
           <Link
             href="/products"
@@ -57,17 +60,17 @@ export default async function ProductsPage({
           >
             همه
           </Link>
-          {CATEGORIES.map((c) => (
+          {CATEGORY_GROUPS.map((g) => (
             <Link
-              key={c.slug}
-              href={`/products?cat=${c.slug}`}
+              key={g.slug}
+              href={`/products?cat=${g.slug}`}
               className={`shrink-0 whitespace-nowrap rounded-full px-4 py-1.5 ${
-                cat === c.slug
+                activeGroup?.slug === g.slug
                   ? "bg-brand-600 font-bold text-white"
                   : "border border-brand-200 text-brand-800 hover:bg-brand-50"
               }`}
             >
-              {c.emoji} {c.label}
+              {g.emoji} {g.label}
             </Link>
           ))}
           <Link

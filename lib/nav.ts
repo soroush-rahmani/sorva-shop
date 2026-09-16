@@ -112,6 +112,10 @@ export const SUB_MENUS: Record<string, NavLeaf[]> = {
 
 export function subcategoriesFor(category?: string): NavLeaf[] {
   if (!category) return [];
+  // گروه «محصولات آرایشی» زیردسته‌هاش همون چهار دسته آرایشی هستن
+  if (category === "cosmetic") {
+    return MAKEUP_MENU.map(({ slug, label, emoji }) => ({ slug, label, emoji }));
+  }
   return SUB_MENUS[category] ?? [];
 }
 

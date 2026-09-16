@@ -20,12 +20,17 @@ const NAV_ITEMS: {
   href?: string;
   label: string;
   emoji: string;
-  mega?: boolean;
+  mega?: boolean; // پنل بزرگ تمامعرض
   dropdown?: NavLeaf[];
   dropdownCat?: string;
 }[] = [
   { href: "/", label: "صفحه اصلی", emoji: "🏡" },
-  { label: "محصولات آرایشی", emoji: "💄", mega: true },
+  {
+    href: "/products?cat=cosmetic",
+    label: "محصولات آرایشی",
+    emoji: "💄",
+    mega: true,
+  },
   {
     label: "محصولات بهداشتی",
     emoji: "🧼",
@@ -118,12 +123,12 @@ export function Header() {
           <div className="flex items-center gap-1">
             {NAV_ITEMS.map((item) =>
               item.mega ? (
-                <button
+                <Link
                   key={item.label}
+                  href={item.href!}
                   onMouseEnter={() => setOpenMenu(item.label)}
-                  onClick={() =>
-                    setOpenMenu(openMenu === item.label ? null : item.label)
-                  }
+                  onClick={() => setOpenMenu(null)}
+                  aria-haspopup="true"
                   aria-expanded={megaOpen}
                   className={`flex items-center gap-1.5 rounded-t-xl px-3 py-3 text-sm font-bold transition-colors ${
                     megaOpen
@@ -148,7 +153,7 @@ export function Header() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                </button>
+                </Link>
               ) : item.dropdown ? (
                 <div
                   key={item.label}
@@ -156,10 +161,10 @@ export function Header() {
                   onMouseEnter={() => setOpenMenu(item.label)}
                   onMouseLeave={() => setOpenMenu(null)}
                 >
-                  <button
-                    onClick={() =>
-                      setOpenMenu(openMenu === item.label ? null : item.label)
-                    }
+                  <Link
+                    href={item.href ?? `/products?cat=${item.dropdownCat}`}
+                    onClick={() => setOpenMenu(null)}
+                    aria-haspopup="true"
                     aria-expanded={openMenu === item.label}
                     className={`flex items-center gap-1.5 rounded-t-xl px-3 py-3 text-sm font-bold transition-colors ${
                       openMenu === item.label
@@ -184,9 +189,9 @@ export function Header() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                  </button>
+                  </Link>
 
-                  {/* پنل کشویی بهداشتی */}
+                  {/* پنل کشویی زیردسته‌ها */}
                   <div
                     className={`absolute right-0 top-full z-50 w-60 rounded-2xl border border-brand-100 bg-white p-2 shadow-xl shadow-brand-200/40 transition-all duration-200 ${
                       openMenu === item.label
@@ -194,15 +199,7 @@ export function Header() {
                         : "invisible -translate-y-1 opacity-0"
                     }`}
                   >
-                    <Link
-                      href={`/products?cat=${item.dropdownCat}`}
-                      onClick={() => setOpenMenu(null)}
-                      className="flex items-center gap-2 rounded-xl bg-brand-50 px-3 py-2 font-bold text-brand-800 transition-colors hover:bg-brand-100"
-                    >
-                      <span className="text-base">{item.emoji}</span>
-                      <span>همه {item.label}</span>
-                    </Link>
-                    <ul className="mt-1 space-y-0.5">
+                    <ul className="space-y-0.5">
                       {item.dropdown.map((leaf) => (
                         <li key={leaf.slug}>
                           <Link
